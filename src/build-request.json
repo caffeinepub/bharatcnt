@@ -1,0 +1,226 @@
+{
+  "kind": "build_request",
+  "title": "Build BHARATcnt as an installable PWA web app (Admin, Seller, Customer) on Internet Computer",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create an installable Progressive Web App (PWA) shell for BHARATcnt with responsive layouts that work on mobile and desktop, including: web app manifest, service worker for offline caching of the app shell, install prompt support, and a basic offline fallback screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "PWA WEB bana kar dijiye"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App includes a valid web app manifest with name, short_name, start_url, display=standalone, theme_color, background_color, and icon entries.",
+        "A service worker is registered in production builds and caches the app shell assets for offline use.",
+        "When offline, navigating to the app shows an offline fallback page/screen instead of a blank error.",
+        "App is usable on mobile viewport sizes (>=320px width) and desktop without horizontal scrolling."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement Internet Identity authentication and role-based access control for three roles: Admin, Seller, and Customer/User. Ensure routes/screens are gated so only the appropriate role can access Admin/Seller features.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "1. ADMIN PANEL (Aapka Control Center)",
+          "2. SELLER APP (Dukan/Brand/Freelancer Ke Liye)",
+          "3. USER/CUSTOMER APP (Grahak Ke Liye)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can sign in and sign out using Internet Identity.",
+        "Backend stores and returns the caller's role (admin/seller/customer) and enforces authorization for protected operations.",
+        "Frontend prevents navigation to protected areas and shows an access denied state when unauthorized.",
+        "A default onboarding path exists for a new principal to become a Customer, and an Admin-only path exists to register/approve a Seller."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Build the Admin Panel module with: (1) KYC verification dashboard to approve/reject seller submissions (Aadhaar + live photo), (2) City and Category management (CRUD), (3) Revenue tracker showing totals for token purchases (₹10) and subscriptions (₹99), (4) User/Seller management to block/unblock accounts.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Verification Dashboard: Nayi dukanon ke Aadhar aur Photos ko check karke \"Approve\" ya \"Reject\" karna.",
+          "City/Category Manager: Nayi cities (e.g., Jaipur, Delhi) aur nayi categories (e.g., Electrician, Gym) add karna.",
+          "Revenue Tracker: Total kitne tokens (₹10) bike aur kitne subscriptions (₹99) aaye, iska live hisab.",
+          "User Management: Kisi bhi fraud seller ya badmashi karne wale user ko block karne ki power."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin can view a list of pending KYC submissions with submitted data and approve or reject each submission with an optional note.",
+        "Approved sellers show a \"Verified\" status that can be used across the app.",
+        "Admin can add/edit/delete cities and categories; changes are reflected in customer search filters.",
+        "Admin can block/unblock a user or seller; blocked accounts cannot create/update business data or perform unlock/purchase actions.",
+        "Admin can view revenue totals for token purchases and subscriptions based on recorded transactions in the backend."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Build the Seller module with: Business Profile management (name, description, photos, address text fields), KYC upload portal (Aadhaar + live photo), Lead dashboard showing customers who unlocked the seller (with a call action that reveals the customer phone only if stored and allowed), QR code generation for the seller/business, Subscription status with renew action, and basic analytics (profile views and tokens/unlocks count).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Business Profile: Apni dukan ka naam, description, photos aur address manage karna.",
+          "KYC Portal: Aadhar card aur dukan ki live photo upload karne ka section.",
+          "Lead Dashboard (Silent): Un sabhi customers ki list jinhone token liya hai. Isme \"Call\" button hoga jisse dukandaar seedha customer se baat kar sake.",
+          "QR Code Generator: Har dukan ka ek unique QR code hoga jise customer scan karega.",
+          "Subscription Status: ₹99 kab expire ho raha hai aur renew karne ka button.",
+          "Analytics: Ye dekhna ki mahine mein kitne logon ne dukan ka page dekha aur kitne tokens bike."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Seller can create and update their business profile and upload multiple photos (stored in-canister) with reasonable size limits.",
+        "Seller can submit KYC documents and see current KYC status (pending/approved/rejected) and any admin note.",
+        "Seller lead dashboard lists unlock events (customer identifier + timestamp); PII is only shown according to the privacy rules defined in the backend.",
+        "Seller can generate and display a QR code that encodes a deep link/URL to their business page within the PWA.",
+        "Seller can view subscription status (active/expired, expiry date) and trigger a renew action (recorded as a new subscription transaction).",
+        "Seller analytics displays total views and total unlocks/tokens over selectable time ranges (at least: last 7 days, last 30 days, all time)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Build the Customer/User module with: browsing/search by City and Category, business listing and business detail page, privacy shield that shows business name but keeps phone/exact location details locked, unlock flow that records a token purchase and unlocks details for a limited time, unlock history, reward wallet (points ledger) tied to QR scans, and report/help submission for businesses.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Category Filters: Sirf wahi dukanen dekhna jo use chahiye (e.g., Beauty Parlor in Udaipur).",
+          "Blurred Details (The Gate): Dukan ka naam dikhega, lekin mobile number aur exact location \"Blurred\" ya \"Locked\" hogi.",
+          "Unlock History: User ne pehle kaun-kaun se tokens liye hain, unka record.",
+          "Reward Wallet: Scan karne par milne wale points jahan jama honge.",
+          "Report/Help: Agar dukan wala galat info de raha hai, toh use report karne ka option."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Customer can filter businesses by city and category and view results in a fast list/grid UI.",
+        "Business detail page shows a locked state for sensitive fields until unlocked.",
+        "Unlock action creates an unlock record and reveals locked fields until expiry; after expiry, fields re-lock automatically.",
+        "Customer can view unlock history with business name and timestamps and current status (active/expired).",
+        "Customer can scan a QR code using the browser camera (where supported) or enter a code manually to earn reward points; points are stored and displayed in a wallet view.",
+        "Customer can submit a report/help ticket against a business; Admin can view reports (at minimum: list + details)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement the time-based auto-expiry rule for unlocked business details: unlocked access must expire automatically after a configurable duration between 24 and 48 hours, and the UI must reflect the re-locked state without manual admin intervention.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Auto-Expiry | Unlock ki gayi detail 24 se 48 ghante baad apne aap fir se lock ho jani chahiye."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores an expiry timestamp for each unlock and uses it to determine whether details are visible.",
+        "Default expiry duration is configurable (set to 24 hours by default).",
+        "After expiry, APIs that return business details for a customer return locked/limited fields.",
+        "Frontend reflects expired unlocks as locked and prompts to unlock again."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Display the legal disclaimer exactly as provided in the app footer and also show it in the unlock confirmation/receipt screen every time a customer unlocks a business.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "App ke footer mein aur har lead unlock hone par ek line likhi honi chahiye:\n> \"Buying/Selling is your Self-Responsibility. BHARATcnt is only an information provider.\""
+        ]
+      },
+      "acceptanceCriteria": [
+        "Footer displays: \"Buying/Selling is your Self-Responsibility. BHARATcnt is only an information provider.\" on all major screens.",
+        "After a successful unlock action, the unlock confirmation screen displays the same disclaimer text.",
+        "The disclaimer text matches exactly (including capitalization and punctuation)."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Add a coherent, consistent visual theme for the BHARATcnt PWA (colors, typography, spacing, and component styling) suitable for an India-focused local business marketplace. Avoid blue/purple as primary brand colors.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App uses a consistent color palette, typography scale, and spacing system across Admin, Seller, and Customer areas.",
+        "Primary brand color is not blue or purple.",
+        "Key UI states are styled (loading, empty, error, disabled, success)."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement a backend data model and API set to support: cities, categories, sellers and businesses, KYC submissions and decisions, user blocks, unlock/token transactions with expiry, subscription transactions with expiry, reward point ledger, reports/help tickets, and analytics counters (views/unlocks).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-3"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All entities required by Admin/Seller/Customer features are represented in stable backend state with clear IDs and timestamps.",
+        "Backend exposes typed methods to create/read/update required entities and enforces authorization by role and ownership.",
+        "Unlock/subscription/points/report events are recorded immutably as transactions/ledger entries (append-only where appropriate).",
+        "Analytics values shown in the UI can be derived from stored events/counters without crashing for empty/new accounts."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui or any frontend immutablePaths listed in SYSTEM_CONTEXT; compose these components instead.",
+    "Backend must remain a single Motoko actor (no additional backend services).",
+    "Do not implement GPS-based location search or map/geolocation features; replace with city-based selection/filtering only (platform limitation).",
+    "Do not implement real push notifications (platform limitation).",
+    "Do not integrate a real UPI payment gateway; implement a placeholder/mock purchase flow (recording transactions) or use Stripe only if explicitly approved later (platform limitation)."
+  ],
+  "nonGoals": [
+    "Native Android/iOS apps (the deliverable is a web PWA).",
+    "Real-time chat or WebSocket-based live updates.",
+    "Third-party auth providers other than Internet Identity.",
+    "External databases or cloud services."
+  ],
+  "imageRequirements": {
+    "required": [
+      "BHARATcnt app icon (pwa-icon.dim_512x512.png)",
+      "BHARATcnt app icon (pwa-icon.dim_192x192.png)",
+      "BHARATcnt maskable app icon (pwa-maskable.dim_512x512.png)",
+      "BHARATcnt splash/launch graphic (pwa-splash.dim_1242x2688.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [
+      "Build BHARATcnt as an installable PWA web app with Admin, Seller, and Customer modules."
+    ],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for all user-facing UI text."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

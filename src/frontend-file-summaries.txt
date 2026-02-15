@@ -1,0 +1,19 @@
+{
+  "frontend/src/components/ui-states/StateScreens.tsx": "Reusable UI state components for loading, error, empty, and success screens with consistent styling across the app.",
+  "frontend/src/components/auth/RequireRole.tsx": "Route wrapper component that enforces role-based access control by casting UserRole__1 enum through unknown to Record type for proper type checking.",
+  "frontend/src/pages/AuthGate.tsx": "Authentication landing page with role detection and navigation to appropriate dashboard based on user role (admin/seller/customer).",
+  "frontend/src/pages/Seller/QrCode.tsx": "QR code display page for sellers using a CDN-based QR code generator instead of the qr-code-styling package.",
+  "frontend/src/lib/StateScreens.tsx": "Reusable UI state components for loading, error, empty, and success screens with consistent styling across the app.",
+  "frontend/src/pages/Admin/KycDashboard.tsx": "Admin KYC verification dashboard displaying pending seller submissions with approve/reject actions and document preview.",
+  "frontend/src/pages/Admin/RevenueTracker.tsx": "Admin revenue tracking dashboard showing token revenue, subscription revenue, and total platform revenue statistics.",
+  "frontend/src/pages/Admin/UserApprovals.tsx": "Admin user approval management screen for reviewing and approving/rejecting seller registration requests.",
+  "frontend/src/pages/Admin/UserManagement.tsx": "Admin user management interface for blocking and unblocking users by principal ID.",
+  "frontend/src/pages/Customer/RewardsWallet.tsx": "Customer rewards wallet displaying total points, reward history, and options to scan QR codes or enter codes manually.",
+  "frontend/src/pages/Customer/Search.tsx": "Customer business search interface with filtering and navigation to business detail pages.",
+  "frontend/src/pages/Customer/UnlockHistory.tsx": "Customer unlock history showing all businesses unlocked with timestamps and active/expired status.",
+  "frontend/src/pages/Seller/Analytics.tsx": "Seller analytics dashboard displaying unlock counts and revenue with time range filtering (7 days, 30 days, all time).",
+  "frontend/src/pages/Seller/BusinessProfileEditor.tsx": "Seller business profile creation and editing form with name, description, address, and contact information fields.",
+  "frontend/src/pages/Seller/KycPortal.tsx": "Seller KYC status display showing current verification status (pending/approved/rejected) with status badges.",
+  "frontend/src/pages/Seller/LeadDashboard.tsx": "Seller lead dashboard listing all customers who unlocked the business with timestamps and expiry status.",
+  "frontend/src/pages/Seller/Subscription.tsx": "Seller subscription management screen showing subscription status, expiry date, and renewal action."
+}

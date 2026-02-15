@@ -1,0 +1,471 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "BHARATcnt PWA (Frontend) — Admin/Seller/Customer modules with II auth, gated routes, and core UX",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add an installable PWA shell with manifest, service worker offline app-shell caching, install prompt support, and an offline fallback screen with responsive layout.",
+      "acceptanceCriteria": [
+        "App includes a valid web app manifest with name, short_name, start_url, display=standalone, theme_color, background_color, and icon entries.",
+        "A service worker is registered in production builds and caches the app shell assets for offline use.",
+        "When offline, navigating to the app shows an offline fallback page/screen instead of a blank error.",
+        "App is usable on mobile viewport sizes (>=320px width) and desktop without horizontal scrolling."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/manifest.webmanifest",
+          "operation": "create",
+          "description": "Create a valid PWA manifest for BHARATcnt including name/short_name/start_url/display=standalone/theme_color/background_color and icon entries that reference generated assets at frontend/public/assets/generated/pwa-icon.dim_192x192.png, frontend/public/assets/generated/pwa-icon.dim_512x512.png, and frontend/public/assets/generated/pwa-maskable.dim_512x512.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/pwa-icon.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated PWA icon asset exactly at this path and wire it in the manifest."
+        },
+        {
+          "path": "frontend/public/assets/generated/pwa-icon.dim_192x192.png",
+          "operation": "create",
+          "description": "Add generated PWA icon asset exactly at this path and wire it in the manifest."
+        },
+        {
+          "path": "frontend/public/assets/generated/pwa-maskable.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated PWA maskable icon asset exactly at this path and wire it in the manifest."
+        },
+        {
+          "path": "frontend/public/assets/generated/pwa-splash.dim_1242x2688.png",
+          "operation": "create",
+          "description": "Add generated PWA splash/launch graphic asset exactly at this path and reference it from HTML metadata where appropriate for PWA installation UX."
+        },
+        {
+          "path": "frontend/public/offline.html",
+          "operation": "create",
+          "description": "Create a basic offline fallback HTML screen that the service worker can serve for navigation requests when the network is unavailable."
+        },
+        {
+          "path": "frontend/public/sw.js",
+          "operation": "create",
+          "description": "Create a service worker that caches the app shell (core HTML/JS/CSS and key static assets) and provides a navigation fallback to frontend/public/offline.html when offline."
+        },
+        {
+          "path": "frontend/src/pwa/registerServiceWorker.ts",
+          "operation": "create",
+          "description": "Add a small helper to register the service worker in production builds and surface registration errors gracefully."
+        },
+        {
+          "path": "frontend/src/pwa/useInstallPrompt.ts",
+          "operation": "create",
+          "description": "Create a hook to capture and expose the PWA install prompt (beforeinstallprompt) so the UI can offer an install button when eligible."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Register the service worker via frontend/src/pwa/registerServiceWorker.ts and ensure the app loads with responsive defaults."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Wire PWA metadata: link to frontend/public/manifest.webmanifest, theme-color, and any required icon/splash metadata referencing the generated assets."
+        },
+        {
+          "path": "frontend/src/pages/OfflineFallback.tsx",
+          "operation": "create",
+          "description": "Create an in-app offline fallback screen for router-based navigation failures and for users who come back online (include a retry action)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Add routing so an offline fallback route/screen exists and can be navigated to from error handling and the service worker fallback messaging."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Implement Internet Identity sign-in/out UX and role-based route gating for Admin, Seller, and Customer, including onboarding for new users and admin-only seller approval/role assignment flows.",
+      "acceptanceCriteria": [
+        "Users can sign in and sign out using Internet Identity.",
+        "Backend stores and returns the caller's role (admin/seller/customer) and enforces authorization for protected operations.",
+        "Frontend prevents navigation to protected areas and shows an access denied state when unauthorized.",
+        "A default onboarding path exists for a new principal to become a Customer, and an Admin-only path exists to register/approve a Seller."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Implement top-level route structure for Customer, Seller, and Admin areas and apply gated wrappers so only the appropriate role can access protected screens. Use the authorization component patterns (role checks, access denied) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useAuth.ts",
+          "operation": "create",
+          "description": "Create a single auth facade hook that composes existing Internet Identity context (useInternetIdentity) with backend-driven role/profile/approval queries and exposes isAuthenticated, user name, app role, and sign-in/out actions. Use authorization and user-approval component guidance — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCurrentUserProfile.ts",
+          "operation": "create",
+          "description": "Add react-query hooks for getCallerUserProfile/saveCallerUserProfile and ensure the \"prevent profile setup modal flash\" behavior recommended by the authorization component — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useCurrentUserRole.ts",
+          "operation": "create",
+          "description": "Add react-query hook(s) for getCallerUserRole/isCallerAdmin and derive app-visible role gating state for Admin/Seller/Customer screens — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useApproval.ts",
+          "operation": "create",
+          "description": "Add react-query hooks for isCallerApproved/requestApproval/listApprovals/setApproval to support the seller approval flow. Use the user-approval component to drive the approval UX — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create a Login/Logout button using existing Internet Identity provider state; when logging out, clear cached react-query data as described by the authorization component — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Create a first-login profile setup modal to collect a human-readable name and persist it via saveCallerUserProfile; default onboarding path sets role to Customer in the stored profile. Use shadcn-ui dialog/form primitives (compose, do not edit ui components) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/AccessDeniedScreen.tsx",
+          "operation": "create",
+          "description": "Create an access denied screen for unauthorized route access (role/approval blocked) following authorization component guidance — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireAuth.tsx",
+          "operation": "create",
+          "description": "Route wrapper that requires Internet Identity authentication before showing any application data (redirect to sign-in screen otherwise). Use authorization component guidance — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireRole.tsx",
+          "operation": "create",
+          "description": "Route wrapper that enforces Admin/Seller/Customer role access and renders AccessDeniedScreen when unauthorized. Use authorization component patterns — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/auth/RequireApproval.tsx",
+          "operation": "create",
+          "description": "Route wrapper for features requiring approval; if not approved, show request approval screen with status. Use user-approval component guidance — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/AuthGate.tsx",
+          "operation": "create",
+          "description": "Create an authentication landing screen that shows app entry choices (Customer/Seller/Admin), sign-in button, and guidance; integrates install prompt hook for PWA install UX."
+        },
+        {
+          "path": "frontend/src/pages/Seller/ApprovalStatus.tsx",
+          "operation": "create",
+          "description": "Create seller approval status screen (pending/approved/rejected) and allow requesting approval when not approved. Use user-approval component hooks — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Admin/UserApprovals.tsx",
+          "operation": "create",
+          "description": "Create admin screen to list approvals and approve/reject sellers using user-approval component-backed backend calls — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Admin/RoleAssignment.tsx",
+          "operation": "create",
+          "description": "Create admin-only UI to assign roles for principals (Admin/Seller/Customer) in-app (and where applicable, call backend role assignment functions). Use authorization/user-approval patterns — Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Build Admin Panel screens for KYC decisions, City/Category management UI, revenue totals, and block/unblock controls; ensure admin-only access and consistent UI states.",
+      "acceptanceCriteria": [
+        "Admin can view a list of pending KYC submissions with submitted data and approve or reject each submission with an optional note.",
+        "Approved sellers show a \"Verified\" status that can be used across the app.",
+        "Admin can add/edit/delete cities and categories; changes are reflected in customer search filters.",
+        "Admin can block/unblock a user or seller; blocked accounts cannot create/update business data or perform unlock/purchase actions.",
+        "Admin can view revenue totals for token purchases and subscriptions based on recorded transactions in the backend."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Admin/AdminLayout.tsx",
+          "operation": "create",
+          "description": "Create an Admin layout with navigation (KYC, City/Category, Revenue, Users) and consistent loading/empty/error states using shadcn-ui components (compose only) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Admin/KycDashboard.tsx",
+          "operation": "create",
+          "description": "Implement admin KYC dashboard using backend getAllPendingKYC/approveKYC/rejectKYC; display submitted Aadhaar/live photo blobs using blob-storage ExternalBlob.getDirectURL() where present. Use blob-storage for rendering stored images — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Admin/CityCategoryManager.tsx",
+          "operation": "create",
+          "description": "Create City & Category management UI (CRUD forms and list views) with clear \"requires backend capability\" placeholders until the backend provides city/category methods; ensure the screen is wired and styled but does not break builds."
+        },
+        {
+          "path": "frontend/src/pages/Admin/RevenueTracker.tsx",
+          "operation": "create",
+          "description": "Create revenue totals view calling getRevenueStats and formatting totals for token purchases and subscriptions; include loading/empty/error UI states using shadcn-ui (compose only) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Admin/UserManagement.tsx",
+          "operation": "create",
+          "description": "Create admin user/seller management UI to block/unblock by principal using blockUser/unblockUser; optionally integrate listApprovals as a discoverable user list. Use shadcn-ui (compose only) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/admin/useAdminData.ts",
+          "operation": "create",
+          "description": "Add admin-focused hooks for KYC list/actions, revenue stats, and block/unblock mutations with react-query caching and error handling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Admin routes and gate them behind RequireRole(Admin); ensure unauthorized users see AccessDeniedScreen."
+        },
+        {
+          "path": "frontend/src/components/business/VerifiedBadge.tsx",
+          "operation": "create",
+          "description": "Create a small reusable \"Verified\" status badge component that can be displayed wherever seller verification status is shown (admin + customer + seller)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Build Seller module screens for business profile management (including photos), KYC upload (Aadhaar + live photo), leads list, QR code display, subscription status/renew, and analytics with selectable time ranges.",
+      "acceptanceCriteria": [
+        "Seller can create and update their business profile and upload multiple photos (stored in-canister) with reasonable size limits.",
+        "Seller can submit KYC documents and see current KYC status (pending/approved/rejected) and any admin note.",
+        "Seller lead dashboard lists unlock events (customer identifier + timestamp); PII is only shown according to the privacy rules defined in the backend.",
+        "Seller can generate and display a QR code that encodes a deep link/URL to their business page within the PWA.",
+        "Seller can view subscription status (active/expired, expiry date) and trigger a renew action (recorded as a new subscription transaction).",
+        "Seller analytics displays total views and total unlocks/tokens over selectable time ranges (at least: last 7 days, last 30 days, all time)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Seller/SellerLayout.tsx",
+          "operation": "create",
+          "description": "Create a Seller layout with navigation (Profile, KYC, Leads, QR Code, Subscription, Analytics) and consistent UI state styling using shadcn-ui (compose only) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Seller/BusinessProfileEditor.tsx",
+          "operation": "create",
+          "description": "Create seller business profile create/update screen using getMyBusinessProfile/createBusinessProfile/updateBusinessProfile. For photos: build a multi-photo uploader UI using blob-storage ExternalBlob uploads and previews via getDirectURL(); keep explicit client-side size limits and clear validation messaging — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Seller/KycPortal.tsx",
+          "operation": "create",
+          "description": "Create KYC portal allowing Aadhaar document upload (file input) and live photo capture using the camera useCamera hook for a preview + capture button. Persist blobs using blob-storage ExternalBlob and show current KYC status (pending/approved/rejected) from the seller's business profile — Verify the camera and blob-storage components' usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Seller/LeadDashboard.tsx",
+          "operation": "create",
+          "description": "Create leads list using getMyLeads, displaying timestamp and customer identifier returned by backend; ensure UI does not reveal extra PII beyond what backend provides."
+        },
+        {
+          "path": "frontend/src/pages/Seller/QrCode.tsx",
+          "operation": "create",
+          "description": "Create a QR code display screen that encodes an internal deep link/URL to the seller business detail route in the PWA. Add a lightweight QR generation approach (frontend library) and render a scannable code."
+        },
+        {
+          "path": "frontend/src/pages/Seller/Subscription.tsx",
+          "operation": "create",
+          "description": "Create subscription status view using subscriptionExpiry from getMyBusinessProfile; add renew action calling renewSubscription with a mock/placeholder payment UX (per constraints) and clear success/error states."
+        },
+        {
+          "path": "frontend/src/pages/Seller/Analytics.tsx",
+          "operation": "create",
+          "description": "Create basic analytics UI with selectable ranges (last 7 days, last 30 days, all time). Implement initial metrics using available backend signals (e.g., leads/unlock history) and design the UI so it can be extended when dedicated analytics capabilities are available."
+        },
+        {
+          "path": "frontend/src/hooks/seller/useSellerData.ts",
+          "operation": "create",
+          "description": "Add seller-focused hooks for profile CRUD, leads, subscription renew mutations, and derived analytics calculations."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Seller routes; gate them behind RequireRole(Seller) plus RequireApproval where appropriate (e.g., business publishing/leads), using user-approval flow — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/package.json",
+          "operation": "modify",
+          "description": "Add/adjust a small QR code generation dependency (if not already present) to support rendering QR codes for the seller QR screen."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Build Customer module for browsing/search, business list + detail with locked fields until unlock, unlock flow + history, reward wallet with QR scan/manual entry, and report/help submission UI; ensure admin can view reports at minimum via UI placeholders if backend capability is missing.",
+      "acceptanceCriteria": [
+        "Customer can filter businesses by city and category and view results in a fast list/grid UI.",
+        "Business detail page shows a locked state for sensitive fields until unlocked.",
+        "Unlock action creates an unlock record and reveals locked fields until expiry; after expiry, fields re-lock automatically.",
+        "Customer can view unlock history with business name and timestamps and current status (active/expired).",
+        "Customer can scan a QR code using the browser camera (where supported) or enter a code manually to earn reward points; points are stored and displayed in a wallet view.",
+        "Customer can submit a report/help ticket against a business; Admin can view reports (at minimum: list + details)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Customer/CustomerLayout.tsx",
+          "operation": "create",
+          "description": "Create a Customer layout with navigation (Search, Unlock History, Rewards Wallet) and consistent UI states using shadcn-ui (compose only) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Customer/Search.tsx",
+          "operation": "create",
+          "description": "Create customer search/browse UI using available backend search capabilities (searchBusinessObjectsByPrefix and/or getSuggestedMatches). Include city/category filter controls in the UI (as required) with graceful fallback messaging where backend-provided city/category lists are not yet available."
+        },
+        {
+          "path": "frontend/src/components/business/BusinessCard.tsx",
+          "operation": "create",
+          "description": "Create a fast list/grid card component for business results with skeleton/loading states and responsive layout; compose shadcn-ui primitives (do not edit ui components) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Customer/BusinessDetail.tsx",
+          "operation": "create",
+          "description": "Create business detail screen calling getBusinessDetails and rendering locked vs unlocked states for sensitive fields (phone/exact details). Display seller \"Verified\" using VerifiedBadge when applicable. Render business images using blob-storage ExternalBlob.getDirectURL() — Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Customer/UnlockConfirm.tsx",
+          "operation": "create",
+          "description": "Create unlock confirmation/receipt screen shown after successful unlock, including the required legal disclaimer text (exact match) and an action to navigate back to business details."
+        },
+        {
+          "path": "frontend/src/pages/Customer/UnlockHistory.tsx",
+          "operation": "create",
+          "description": "Create unlock history screen using getMyUnlockHistory, showing business identifier/name (where available), timestamps, and active/expired status derived from expiry time; allow navigating back to business detail."
+        },
+        {
+          "path": "frontend/src/pages/Customer/RewardsWallet.tsx",
+          "operation": "create",
+          "description": "Create rewards wallet screen using getMyRewards and rendering points ledger-like entries and totals; include both QR scan and manual code entry entry points."
+        },
+        {
+          "path": "frontend/src/pages/Customer/QRScan.tsx",
+          "operation": "create",
+          "description": "Create QR scan screen using the qr-code useQRScanner hook, with robust error display, start/stop controls, and responsive preview sizing. On scan, interpret decoded data (e.g., reward id or deep link) and navigate accordingly — Verify the qr-code component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Customer/ReportHelp.tsx",
+          "operation": "create",
+          "description": "Create a report/help submission UI (form tied to a business) with clear UX and client-side validation. If backend report submission capability is not available yet, store drafts locally and show \"submission requires backend capability\" messaging without breaking the app."
+        },
+        {
+          "path": "frontend/src/pages/Admin/Reports.tsx",
+          "operation": "create",
+          "description": "Create an admin reports list + details UI. If backend report listing capability is not available yet, show a non-breaking placeholder state and wiring so the screen exists for future backend integration."
+        },
+        {
+          "path": "frontend/src/hooks/customer/useCustomerData.ts",
+          "operation": "create",
+          "description": "Add customer-focused hooks for searching, business details, unlock mutation, unlock history, rewards queries, and reward-by-id lookup for scanned/manual codes."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire Customer routes and ensure they are gated behind RequireAuth and RequireRole(Customer) as needed; include routes for business detail, unlock confirmation, wallet, history, QR scan, and report/help."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Ensure unlocked business details auto-expire in the UI based on expiry timestamps (24–48h configurable), automatically re-locking fields and prompting re-unlock without admin intervention.",
+      "acceptanceCriteria": [
+        "Backend stores an expiry timestamp for each unlock and uses it to determine whether details are visible.",
+        "Default expiry duration is configurable (set to 24 hours by default).",
+        "After expiry, APIs that return business details for a customer return locked/limited fields.",
+        "Frontend reflects expired unlocks as locked and prompts to unlock again."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/config/unlock.ts",
+          "operation": "create",
+          "description": "Create frontend configuration for default unlock duration (24 hours) and allowed range (24–48 hours) used when calling unlockBusiness and for UI messaging."
+        },
+        {
+          "path": "frontend/src/hooks/customer/useUnlocking.ts",
+          "operation": "create",
+          "description": "Create utilities/hooks to compute unlock active/expired state from TokenPurchase.expiry, schedule re-render/re-lock timers, and centralize the unlockBusiness mutation (with expiryDuration from config)."
+        },
+        {
+          "path": "frontend/src/pages/Customer/BusinessDetail.tsx",
+          "operation": "modify",
+          "description": "Update business detail to (a) detect whether an active unlock exists, (b) show unlocked fields only while active, (c) automatically re-lock when expiry passes, and (d) prompt to unlock again when expired."
+        },
+        {
+          "path": "frontend/src/pages/Customer/UnlockHistory.tsx",
+          "operation": "modify",
+          "description": "Ensure unlock history statuses update automatically as time passes (active -> expired) without requiring manual refresh, while still supporting manual refresh."
+        },
+        {
+          "path": "frontend/src/pages/Customer/Search.tsx",
+          "operation": "modify",
+          "description": "Ensure any preview/summary UI consistently reflects lock/unlock state based on active unlocks and expiry where applicable (e.g., show lock icon / call-to-action)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Show the exact legal disclaimer in the global footer and on every unlock confirmation/receipt screen.",
+      "acceptanceCriteria": [
+        "Footer displays: \"Buying/Selling is your Self-Responsibility. BHARATcnt is only an information provider.\" on all major screens.",
+        "After a successful unlock action, the unlock confirmation screen displays the same disclaimer text.",
+        "The disclaimer text matches exactly (including capitalization and punctuation)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/constants/legal.ts",
+          "operation": "create",
+          "description": "Add a single exported constant for the disclaimer text exactly as provided to prevent drift across the app."
+        },
+        {
+          "path": "frontend/src/components/layout/AppFooter.tsx",
+          "operation": "create",
+          "description": "Create a shared footer component that renders the exact disclaimer text from frontend/src/constants/legal.ts on all major screens."
+        },
+        {
+          "path": "frontend/src/pages/Customer/UnlockConfirm.tsx",
+          "operation": "modify",
+          "description": "Ensure the unlock receipt/confirmation screen displays the exact disclaimer text (from frontend/src/constants/legal.ts) every time an unlock succeeds."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire AppFooter into the global layout so it appears across Admin/Seller/Customer major screens."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Apply a consistent India-focused marketplace visual theme (avoid blue/purple primary) with coherent typography/spacing and styled loading/empty/error/success/disabled states across all modules.",
+      "acceptanceCriteria": [
+        "App uses a consistent color palette, typography scale, and spacing system across Admin, Seller, and Customer areas.",
+        "Primary brand color is not blue or purple.",
+        "Key UI states are styled (loading, empty, error, disabled, success)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Create global styles and Tailwind (or equivalent) theme tokens for a consistent palette/typography/spacing; ensure primary brand color is not blue/purple and define styles for loading/empty/error/success/disabled states using existing global entry point conventions."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create a shared app shell layout (header/nav/container) used by Admin/Seller/Customer layouts to enforce consistent spacing/typography and responsive behavior; compose shadcn-ui components (do not edit ui components) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ui-states/StateScreens.tsx",
+          "operation": "create",
+          "description": "Create shared, consistently styled UI for loading/empty/error/success states (to reuse across screens) using shadcn-ui primitives (compose only) — Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Admin/AdminLayout.tsx",
+          "operation": "modify",
+          "description": "Adopt AppShell and shared UI state components to ensure consistent themed styling across admin screens."
+        },
+        {
+          "path": "frontend/src/pages/Seller/SellerLayout.tsx",
+          "operation": "modify",
+          "description": "Adopt AppShell and shared UI state components to ensure consistent themed styling across seller screens."
+        },
+        {
+          "path": "frontend/src/pages/Customer/CustomerLayout.tsx",
+          "operation": "modify",
+          "description": "Adopt AppShell and shared UI state components to ensure consistent themed styling across customer screens."
+        }
+      ]
+    }
+  ]
+}

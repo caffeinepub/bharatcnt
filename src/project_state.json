@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "BHARATcnt platform to be built as a PWA web app including Admin Panel, Seller app, and User/Customer app with token-based unlocking, KYC verification, subscriptions, and UPI payments.",
+  "architectural_notes": [
+    "Platform is to be delivered as a PWA web application (installable, responsive) with distinct experiences for Admin, Seller, and User."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- BHARATcnt app icon (pwa-icon.dim_512x512.png)\n- BHARATcnt app icon (pwa-icon.dim_192x192.png)\n- BHARATcnt maskable app icon (pwa-maskable.dim_512x512.png)\n- BHARATcnt splash/launch graphic (pwa-splash.dim_1242x2688.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-an-installable-progressive-web-app-pwa-shell-for-bharatcnt-with-responsive-layouts-that-work-on-mobile-and-desktop-including-web-app-manifest-service-worker-for-offline-caching-of-the-app-shell-install-prompt-support-and-a-basic-offline-fallback-screen",
+      "title": "Create an installable Progressive Web App (PWA) shell for BHARATcnt with responsive layouts that work on mobile and desktop, including: web app manifest, service worker for offline caching of the app shell, install prompt support, and a basic offline fallback screen.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-internet-identity-authentication-and-role-based-access-control-for-three-roles-admin-seller-and-customer-user-ensure-routes-screens-are-gated-so-only-the-appropriate-role-can-access-admin-seller-features",
+      "title": "Implement Internet Identity authentication and role-based access control for three roles: Admin, Seller, and Customer/User. Ensure routes/screens are gated so only the appropriate role can access Admin/Seller features.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-panel-module-with-1-kyc-verification-dashboard-to-approve-reject-seller-submissions-aadhaar-live-photo-2-city-and-category-management-crud-3-revenue-tracker-showing-totals-for-token-purchases-10-and-subscriptions-99-4-user-seller-management-to-block-unblock-accounts",
+      "title": "Build the Admin Panel module with: (1) KYC verification dashboard to approve/reject seller submissions (Aadhaar + live photo), (2) City and Category management (CRUD), (3) Revenue tracker showing totals for token purchases (₹10) and subscriptions (₹99), (4) User/Seller management to block/unblock accounts.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-seller-module-with-business-profile-management-name-description-photos-address-text-fields-kyc-upload-portal-aadhaar-live-photo-lead-dashboard-showing-customers-who-unlocked-the-seller-with-a-call-action-that-reveals-the-customer-phone-only-if-stored-and-allowed-qr-code-generation-for-the-seller-business-subscription-status-with-renew-action-and-basic-analytics-profile-views-and-tokens-unlocks-count",
+      "title": "Build the Seller module with: Business Profile management (name, description, photos, address text fields), KYC upload portal (Aadhaar + live photo), Lead dashboard showing customers who unlocked the seller (with a call action that reveals the customer phone only if stored and allowed), QR code generation for the seller/business, Subscription status with renew action, and basic analytics (profile views and tokens/unlocks count).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-customer-user-module-with-browsing-search-by-city-and-category-business-listing-and-business-detail-page-privacy-shield-that-shows-business-name-but-keeps-phone-exact-location-details-locked-unlock-flow-that-records-a-token-purchase-and-unlocks-details-for-a-limited-time-unlock-history-reward-wallet-points-ledger-tied-to-qr-scans-and-report-help-submission-for-businesses",
+      "title": "Build the Customer/User module with: browsing/search by City and Category, business listing and business detail page, privacy shield that shows business name but keeps phone/exact location details locked, unlock flow that records a token purchase and unlocks details for a limited time, unlock history, reward wallet (points ledger) tied to QR scans, and report/help submission for businesses.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-time-based-auto-expiry-rule-for-unlocked-business-details-unlocked-access-must-expire-automatically-after-a-configurable-duration-between-24-and-48-hours-and-the-ui-must-reflect-the-re-locked-state-without-manual-admin-intervention",
+      "title": "Implement the time-based auto-expiry rule for unlocked business details: unlocked access must expire automatically after a configurable duration between 24 and 48 hours, and the UI must reflect the re-locked state without manual admin intervention.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-legal-disclaimer-exactly-as-provided-in-the-app-footer-and-also-show-it-in-the-unlock-confirmation-receipt-screen-every-time-a-customer-unlocks-a-business",
+      "title": "Display the legal disclaimer exactly as provided in the app footer and also show it in the unlock confirmation/receipt screen every time a customer unlocks a business.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-coherent-consistent-visual-theme-for-the-bharatcnt-pwa-colors-typography-spacing-and-component-styling-suitable-for-an-india-focused-local-business-marketplace-avoid-blue-purple-as-primary-brand-colors",
+      "title": "Add a coherent, consistent visual theme for the BHARATcnt PWA (colors, typography, spacing, and component styling) suitable for an India-focused local business marketplace. Avoid blue/purple as primary brand colors.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Build BHARATcnt as a PWA web app (installable, responsive) instead of native apps",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Admin Panel: verification dashboard (Aadhar + photo approve/reject), city/category manager, revenue tracker (₹10 tokens + ₹99 subscriptions), user management (block), push notifications",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Seller PWA module: business profile management, KYC upload portal, silent lead dashboard with call button, unique QR code generator, subscription status/renewal (₹99), analytics (views/tokens)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "User/Customer PWA module: location-based search, category filters, blurred/locked details gated by token, UPI payment to unlock (₹10), unlock history, reward wallet (QR scan points), report/help",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Core platform essentials: privacy shield (hide contact before unlock), Google Maps button after unlock, verified badge (blue tick), in-app UPI payments for ₹10/₹99, auto-expiry re-lock after 24–48 hours, legal disclaimer shown in footer and on each unlock",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Implement a backend data model and API set to support: cities, categories, sellers and businesses, KYC submissions and decisions, user blocks, unlock/token transactions with expiry, subscription transactions with expiry, reward point ledger, reports/help tickets, and analytics counters (views/unlocks).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "BHARATcnt",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

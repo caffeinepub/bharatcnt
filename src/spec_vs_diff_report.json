@@ -1,0 +1,109 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-15T04:31:16.306Z",
+  "summary": "The diff adds substantial routing/auth scaffolding (Internet Identity hooks, role/approval guards, Admin/Seller/Customer route structure), a footer with the required disclaimer text, an offline route/screen hook-up, and a non-blue/purple theme via CSS variables. However, explicit PWA artifacts (manifest, service worker, install prompt handling, offline caching) and the required PWA image assets are not evidenced in the provided diff summary. Some requested UI/feature specifics (e.g., disclaimer on unlock confirmation) cannot be confirmed from the shown files.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Create an installable PWA shell including a web app manifest, service worker for offline caching of the app shell, install prompt support, and an offline fallback screen.",
+      "reason": "An offline fallback route/component is referenced, but there is no evidence of a web app manifest, service worker registration/caching logic, or install prompt support in the visible diff summary.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-1",
+      "requirement": "Provide required PWA images: pwa-icon.dim_512x512.png, pwa-icon.dim_192x192.png, pwa-maskable.dim_512x512.png, pwa-splash.dim_1242x2688.png",
+      "reason": "No added image asset files are shown in the diff summary; the summary only lists code files and indicates many omitted files, so these required assets are not evidenced as added.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Show the legal disclaimer in the unlock confirmation/receipt screen every time a customer unlocks a business.",
+      "reason": "The disclaimer is implemented in the footer via a shared constant, but there is no evidence in the shown diff that the unlock confirmation screen renders the disclaimer text.",
+      "evidence": [
+        "frontend/src/components/layout/AppFooter.tsx",
+        "frontend/src/constants/legal.ts",
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Footer includes a promotional attribution link to caffeine.ai with UTM parameters and a heart icon.",
+      "reason": "The BuildRequest does not ask for external promotional links/attribution in the footer; only the exact legal disclaimer placement is specified.",
+      "evidence": [
+        "frontend/src/components/layout/AppFooter.tsx"
+      ]
+    },
+    {
+      "description": "Access control initialization via a secret URL parameter (caffeineAdminToken) during actor creation.",
+      "reason": "The BuildRequest specifies Internet Identity + role-based access control but does not request a secret-token bootstrap mechanism via URL parameters.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts"
+      ]
+    }
+  ],
+  "confidence": 0.63,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/public/manifest.webmanifest",
+    "frontend/public/offline.html",
+    "frontend/public/sw.js",
+    "frontend/src/App.tsx",
+    "frontend/src/components/auth/AccessDeniedScreen.tsx",
+    "frontend/src/components/auth/LoginButton.tsx",
+    "frontend/src/components/auth/ProfileSetupModal.tsx",
+    "frontend/src/components/auth/RequireApproval.tsx",
+    "frontend/src/components/auth/RequireAuth.tsx",
+    "frontend/src/components/auth/RequireRole.tsx",
+    "frontend/src/components/business/BusinessCard.tsx",
+    "frontend/src/components/business/VerifiedBadge.tsx",
+    "frontend/src/components/layout/AppFooter.tsx",
+    "frontend/src/components/layout/AppShell.tsx",
+    "frontend/src/config/unlock.ts",
+    "frontend/src/constants/legal.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useAuth.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/StateScreens.tsx",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/Admin/AdminLayout.tsx",
+    "frontend/src/pages/Admin/CityCategoryManager.tsx",
+    "frontend/src/pages/Admin/KycDashboard.tsx",
+    "frontend/src/pages/Admin/Reports.tsx",
+    "frontend/src/pages/Admin/RevenueTracker.tsx",
+    "frontend/src/pages/Admin/RoleAssignment.tsx",
+    "frontend/src/pages/Admin/UserApprovals.tsx",
+    "frontend/src/pages/Admin/UserManagement.tsx",
+    "frontend/src/pages/AuthGate.tsx",
+    "frontend/src/pages/Customer/BusinessDetail.tsx",
+    "frontend/src/pages/Customer/CustomerLayout.tsx",
+    "frontend/src/pages/Customer/QRScan.tsx",
+    "frontend/src/pages/Customer/ReportHelp.tsx",
+    "frontend/src/pages/Customer/RewardsWallet.tsx",
+    "frontend/src/pages/Customer/Search.tsx",
+    "frontend/src/pages/Customer/UnlockConfirm.tsx",
+    "frontend/src/pages/Customer/UnlockHistory.tsx",
+    "frontend/src/pages/OfflineFallback.tsx",
+    "frontend/src/pages/Seller/Analytics.tsx",
+    "frontend/src/pages/Seller/ApprovalStatus.tsx",
+    "frontend/src/pages/Seller/BusinessProfileEditor.tsx",
+    "frontend/src/pages/Seller/KycPortal.tsx",
+    "frontend/src/pages/Seller/LeadDashboard.tsx",
+    "frontend/src/pages/Seller/QrCode.tsx",
+    "frontend/src/pages/Seller/SellerLayout.tsx",
+    "frontend/src/pages/Seller/Subscription.tsx",
+    "frontend/src/pwa/registerServiceWorker.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
